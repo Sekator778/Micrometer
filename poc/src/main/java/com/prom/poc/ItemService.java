@@ -1,29 +1,30 @@
 package com.prom.poc;
 
-import io.micrometer.core.instrument.Gauge;
 import org.springframework.stereotype.Component;
-import io.micrometer.core.instrument.Counter;
-import io.micrometer.core.instrument.composite.CompositeMeterRegistry;
+
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.composite.CompositeMeterRegistry;
 
 @Component
 public class ItemService {
     private static int bookOrderId = 0;
     private static int movieOrderId = 0;
-    private Counter bookCounter = null;
-    private Counter movieCounter = null;
-    private AtomicInteger activeUsers = null;
+    private Counter bookCounter;
+    private Counter movieCounter;
+    private AtomicInteger activeUsers;
 
     public ItemService(CompositeMeterRegistry meterRegistry) {
         bookCounter = meterRegistry.counter("order.books");
         movieCounter = meterRegistry.counter("order.movies");
-        activeUsers = meterRegistry.gauge("number.of.active.users",new AtomicInteger(0));
+        activeUsers = meterRegistry.gauge("number.of.active.users", new AtomicInteger(0));
         Random random = new Random();
         activeUsers.set(random.nextInt());
     }
 
-    public Number fetchActiveUsers(){
+    public Number fetchActiveUsers() {
         return 5;
     }
 
